@@ -108,14 +108,6 @@ def proc_nslkdd(df_tr, df_te):
     df_te = df_te.drop(['protocol_type', 'service', 'flag'], axis = 1)
     df_te = df_te.astype(float)
     df_tr = df_tr.astype(float)
-
-    #X_tr, y_tr = df_tr.values[:,:-1], df_tr['target'].values
-    #X_te, y_te = df_te.values[:,:-1], df_te['target'].values
-
-    # column has nans so we are going to get rid of it. 
-    #X_tr = np.delete(X_tr, 19, 1)
-    #X_te = np.delete(X_te, 19, 1)
-
     return df_tr, df_te
 
 
