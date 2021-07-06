@@ -185,17 +185,17 @@ def evaluate_binary_prequential(subscription_id,
 
     # instantiate a based classifier from each of the classifiers in multiflow that 
     # we are going to benchmark against. 
-    clfrs = [
-                HoeffdingTreeClassifier(), 
-                OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
-                OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
-                LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
-            ]
     #clfrs = [
+    #            HoeffdingTreeClassifier(), 
     #            OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
     #            OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
     #            LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
     #        ]
+    clfrs = [
+                OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
+                OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
+                LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
+            ]
     N = len(clfrs)
 
     # concat the training and testing data into a stream 
@@ -328,13 +328,18 @@ def evaluate_binary_holdout(subscription_id,
     y_hold = df_te['target'].values
 
     # instantiate a based classifier from each of the classifiers in multiflow that 
-    # we are going to benchmark against. 
+    # we are going to benchmark against.
+    #clfrs = [
+    #            HoeffdingTreeClassifier(), 
+    #            OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
+    #            OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
+    #            LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
+    #        ]
     clfrs = [
-                HoeffdingTreeClassifier(), 
                 OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
                 OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
                 LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
-            ]
+            ]  
     N = len(clfrs)
     clfrs_names = ['HT', 'Bag', 'BagADWIN', 'Leverage']
 
