@@ -119,13 +119,13 @@ def exp_make_jmi_2D(subscription_id,
 
     # separate the data from the labels for the training and testing data 
     Xtr = df_tr_drop.values[:,:-1]
-    ytr = df_tr_drop['label'].values
+    ytr = df_tr_drop['target'].values
 
     # standardize the data based on the transform found from the training data 
     scaler = preprocessing.StandardScaler().fit(Xtr)
     Xtr = scaler.transform(Xtr) 
     n, K = Xtr.shape
-    feat_names = df_tr_drop.drop('label', axis = 1).keys()
+    feat_names = df_tr_drop.drop('target', axis = 1).keys()
 
     J = np.zeros((K, K))
 

@@ -24,7 +24,7 @@ from streamcyber import exp_make_jmi_2D, evaluate_binary_prequential
 from streamcyber import evaluate_lambda, evaluate_binary_holdout
 from streamcyber import read_azure
 
-DATASET = ['nslkdd', 'unswnb', 'nslkdd']
+DATASET = ['nslkdd', 'unswnb']
 
 if __name__ == '__main__': 
 
@@ -65,6 +65,7 @@ if __name__ == '__main__':
                                 dataset_name=dataset_name, 
                                 output_path='outputs/')
 
+        # run the study of sampling 
         evaluate_lambda(subscription_id, 
                         resource_group, 
                         workspace_name, 
