@@ -24,7 +24,7 @@ from streamcyber import exp_make_jmi_2D, evaluate_binary_prequential
 from streamcyber import evaluate_lambda, evaluate_binary_holdout
 from streamcyber import read_azure
 
-DATASET = ['unswnb', 'nslkdd']
+DATASET = ['nslkdd', 'unswnb', 'nslkdd']
 
 if __name__ == '__main__': 
 
@@ -35,12 +35,12 @@ if __name__ == '__main__':
         exp_make_poisson_plots(output_path='outputs/')
 
         # make the JMI plots for the 
-        exp_make_jmi_plots(subscription_id=subscription_id, 
-                       resource_group=resource_group, 
-                       workspace_name=workspace_name, 
-                       dataset_name=dataset_name, 
-                       n_avg=10, 
-                       output_path='outputs/')
+        #exp_make_jmi_plots(subscription_id=subscription_id, 
+        #               resource_group=resource_group, 
+        #               workspace_name=workspace_name, 
+        #               dataset_name=dataset_name, 
+        #               n_avg=10, 
+        #               output_path='outputs/')
     
         # make the 2D JMI plot [NEEDS FIX]
         #exp_make_jmi_2D(subscription_id, 

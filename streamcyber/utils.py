@@ -108,6 +108,7 @@ def proc_nslkdd(df_tr, df_te):
     df_te = df_te.drop(['protocol_type', 'service', 'flag'], axis = 1)
     df_te = df_te.astype(float)
     df_tr = df_tr.astype(float)
+    df_tr['target'], df_te['target'] = df_tr['target'].astype(int), df_te['target'].astype(int)
     return df_tr, df_te
 
 
