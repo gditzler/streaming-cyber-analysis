@@ -35,19 +35,19 @@ if __name__ == '__main__':
         exp_make_poisson_plots(output_path='outputs/')
 
         # make the JMI plots for the 
-        #exp_make_jmi_plots(subscription_id=subscription_id, 
-        #               resource_group=resource_group, 
-        #               workspace_name=workspace_name, 
-        #               dataset_name=dataset_name, 
-        #               n_avg=10, 
-        #               output_path='outputs/')
+        exp_make_jmi_plots(subscription_id=subscription_id, 
+                       resource_group=resource_group, 
+                       workspace_name=workspace_name, 
+                       dataset_name=dataset_name, 
+                       n_avg=10, 
+                       output_path='outputs/')
     
-        # make the 2D JMI plot [NEEDS FIX]
-        #exp_make_jmi_2D(subscription_id, 
-        #            resource_group, 
-        #            workspace_name, 
-        #            dataset_name=dataset_name, 
-        #            output_path='outputs/')
+        # make the 2D JMI plot 
+        exp_make_jmi_2D(subscription_id, 
+                    resource_group, 
+                    workspace_name, 
+                    dataset_name=dataset_name, 
+                    output_path='outputs/')
 
         # perform prequential exp
         evaluate_binary_prequential(subscription_id, 
