@@ -1,0 +1,6 @@
+#*.pyc 
+ files 
+*.pyc 
+streamcyber/read_azure.py 
+
+# folders 
