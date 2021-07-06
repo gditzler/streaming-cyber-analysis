@@ -46,6 +46,11 @@ from skfeature.function.information_theoretical_based import JMI, LCSI
 
 def exp_make_poisson_plots(output_path:str='outputs/'):
     """make the poisson plots for the paper 
+
+    Parameters 
+    ----------------- 
+    output_path : str
+       path to the output directory [save a pdf figure]
     """ 
     p1, p2, p3 = poisson(1.), poisson(5.), poisson(10.)
     x = [i for i in range(20)]
@@ -64,9 +69,21 @@ def exp_make_jmi_plots(subscription_id,
                        resource_group, 
                        workspace_name, 
                        dataset_name:str='unswnb', 
-                       n_avg:int=10, 
                        output_path:str='outputs/'): 
-    """
+    """plot the mutual information between variables and labels
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     df_tr, df_te = load_dataset(subscription_id, resource_group, workspace_name, dataset_name)
 
@@ -111,7 +128,20 @@ def exp_make_jmi_2D(subscription_id,
                     workspace_name, 
                     dataset_name:str='unswnb', 
                     output_path:str='outputs/'): 
-    """
+    """generate a correlation-like plot of the joint mutual information
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     # 1) randomly shuffle rows; 2) rename label column; 3) drop not useful columns 
     df_tr, _ = load_dataset(subscription_id, resource_group, workspace_name, dataset_name)
@@ -161,7 +191,22 @@ def evaluate_binary_prequential(subscription_id,
                                 poisson_parameter:float=4.,
                                 dataset_name:str='unswnb', 
                                 output_path:str='outputs/'): 
-    """
+    """run the prequntial experiments 
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    poisson_paremeter : float 
+        Poisson distribution parameter 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     # number of data samples used to pre-train the model 
     pretrain_size = 2000
@@ -191,11 +236,6 @@ def evaluate_binary_prequential(subscription_id,
                 OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
                 LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
             ]
-    #clfrs = [
-    #            OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
-    #            OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
-    #            LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
-    #        ]
     N = len(clfrs)
 
     # concat the training and testing data into a stream 
@@ -210,11 +250,11 @@ def evaluate_binary_prequential(subscription_id,
         # configure the prequential datastream evaluator. results are saved to the 
         # google drive. 
         eval = EvaluatePrequential(show_plot=False, 
-                             pretrain_size=pretrain_size, 
-                             batch_size=batch_size, 
-                             metrics=metrics, 
-                             max_samples=max_samples,
-                             output_file=output_path + output_files[n] + '.csv')
+                                   pretrain_size=pretrain_size, 
+                                   batch_size=batch_size, 
+                                   metrics=metrics, 
+                                   max_samples=max_samples,
+                                   output_file=''.join([output_path, output_files[n], '.csv']))
         # process the datastream then save off the models and evaluation 
         mdl = eval.evaluate(stream=stream, model=mdl)
         mdls.append(mdl[0])
@@ -305,7 +345,22 @@ def evaluate_binary_holdout(subscription_id,
                             poisson_parameter:float=4.,
                             dataset_name:str='unswnb', 
                             output_path:str='outputs/'):
-    """
+    """run the holdout experiments 
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    poisson_parameter : float 
+        Poisson distribution parameter 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     # number of data samples used to pre-train the model 
     pretrain_size = 2000
@@ -335,11 +390,6 @@ def evaluate_binary_holdout(subscription_id,
                 OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
                 LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
             ]
-    #clfrs = [
-    #            OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
-    #            OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
-    #            LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
-    #        ]  
     N = len(clfrs)
     clfrs_names = ['HT', 'Bag', 'BagADWIN', 'Leverage']
 
@@ -355,7 +405,7 @@ def evaluate_binary_holdout(subscription_id,
                              batch_size=batch_size, 
                              metrics=metrics, 
                              max_samples=max_samples,
-                             output_file=output_path + 'tmp.csv')
+                             output_file=''.join([output_path, 'tmp.csv']))
         mdl = eval.evaluate(stream=stream, model=mdl)
 
         # get the predictions on the hold out dataset then calculate the accuracy, 
@@ -405,7 +455,20 @@ def evaluate_lambda(subscription_id,
                      workspace_name, 
                      dataset_name:str='unswnb', 
                      output_path:str='outputs/'): 
-    """
+    """run the ablation study 
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     # number of data samples used to pre-train the model 
     pretrain_size = 2000
@@ -436,7 +499,7 @@ def evaluate_lambda(subscription_id,
                              batch_size=batch_size, 
                              metrics=metrics, 
                              max_samples=max_samples,
-                             output_file=output_path + 'lambda_' + str(int(LAMBDA[n])) + '.csv')
+                             output_file=''.join([output_path, 'lambda_', str(int(LAMBDA[n])), '.csv']))
         # process the datastream then save off the models and evaluation 
         mdl = eval.evaluate(stream=stream, model=mdl)
         mdls.append(mdl[0])

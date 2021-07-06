@@ -39,7 +39,6 @@ if __name__ == '__main__':
                        resource_group=resource_group, 
                        workspace_name=workspace_name, 
                        dataset_name=dataset_name, 
-                       n_avg=10, 
                        output_path='outputs/')
     
         # make the 2D JMI plot 
