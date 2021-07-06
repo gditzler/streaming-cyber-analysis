@@ -24,7 +24,7 @@ from streamcyber import exp_make_jmi_2D, evaluate_binary_prequential
 from streamcyber import evaluate_lambda, evaluate_binary_holdout
 from streamcyber import read_azure
 
-DATASET = ['nslkdd', 'unswnb', 'nslkdd']
+DATASET = ['nslkdd', 'unswnb']
 
 if __name__ == '__main__': 
 
