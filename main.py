@@ -65,6 +65,7 @@ if __name__ == '__main__':
                                 dataset_name=dataset_name, 
                                 output_path='outputs/')
 
+        # run the study of sampling 
         evaluate_lambda(subscription_id, 
                         resource_group, 
                         workspace_name, 
