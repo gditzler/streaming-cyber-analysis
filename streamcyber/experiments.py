@@ -451,10 +451,10 @@ def evaluate_binary_holdout(subscription_id,
 
  
 def evaluate_lambda(subscription_id, 
-                     resource_group, 
-                     workspace_name, 
-                     dataset_name:str='unswnb', 
-                     output_path:str='outputs/'): 
+                    resource_group, 
+                    workspace_name, 
+                    dataset_name:str='unswnb', 
+                    output_path:str='outputs/'): 
     """run the ablation study 
 
     Parameters 
@@ -528,7 +528,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('Accuracy')
-    plt.savefig(''.join([output_path, 'lambda_accuracy_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_accuracy_m.pdf']))
 
     # plot the kappa statistics 
     plt.figure()
@@ -540,7 +540,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('Kappa')
-    plt.savefig(''.join([output_path, 'lambda_kappa_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_kappa_m.pdf']))
 
     # plot the f1-scores 
     plt.figure()
@@ -552,7 +552,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('F1-Score')
-    plt.savefig(''.join([output_path, 'lambda_f1_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_f1_m.pdf']))
 
     # plot the total_running_time_ 
     plt.figure()
@@ -564,7 +564,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('time (s)')
-    plt.savefig(''.join([output_path, 'lambda_time_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_time_m.pdf']))
 
     # plot the testing_time_ 
     plt.figure()
@@ -576,7 +576,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('time (s)')
-    plt.savefig(''.join([output_path, 'lambda_test_time_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_test_time_m.pdf']))
 
     # plot the model_size_ 
     plt.figure()
@@ -588,4 +588,4 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('Size (kB)')
-    plt.savefig(''.join([output_path, 'lambda_size_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, 'lambda_size_m.pdf']))
