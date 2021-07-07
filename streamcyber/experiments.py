@@ -314,7 +314,7 @@ def evaluate_binary_prequential(subscription_id,
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
                    ''.join([output_path, dataset_name, '_online_size_m.pdf']), 'model_size_[M0]', 'Size (kB)')
 
-    file = open(''.join([output_path, dataset_name, '_prequential_latex.txt']), 'wb')
+    file = open(''.join([output_path, dataset_name, '_prequential_latex.txt']), 'w')
     # print out the latex tables 
     file.write('\\bf Metric & \\bf HT & \\bf Bagging & \\bf BagADWIN & \\bf Leverage \\\\')
     file.write('\\hline\\hline')
@@ -440,7 +440,7 @@ def evaluate_binary_holdout(subscription_id,
         kappas_static.append(kappa)
 
     # print out the latex tables 
-    file = open(''.join([output_path, dataset_name, '_holdout_latex.txt']), 'wb')  
+    file = open(''.join([output_path, dataset_name, '_holdout_latex.txt']), 'w')  
     ' & '.join(clfrs_names) + '\\\\'
     for n in range(N): 
         file.write(clfrs_names[n] + ' & ' + str(100*accs[n])+ ' & ' + str(100*f1s[n])+ ' & ' + str(100*kappas[n]) + '\\\\')
