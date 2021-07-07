@@ -499,7 +499,7 @@ def evaluate_lambda(subscription_id,
                              batch_size=batch_size, 
                              metrics=metrics, 
                              max_samples=max_samples,
-                             output_file=''.join([output_path, 'lambda_', str(int(LAMBDA[n])), '.csv']))
+                             output_file=''.join([output_path, dataset_name, '_lambda_', str(int(LAMBDA[n])), '.csv']))
         # process the datastream then save off the models and evaluation 
         mdl = eval.evaluate(stream=stream, model=mdl)
         mdls.append(mdl[0])
@@ -511,11 +511,11 @@ def evaluate_lambda(subscription_id,
 
     # the results from the prequential experiements need to be loaded from the drive 
     # since they are not in the environment
-    df_l1 = pd.read_csv(''.join([output_path, 'lambda_1.csv']), comment='#')
-    df_l2 = pd.read_csv(''.join([output_path, 'lambda_2.csv']), comment='#')
-    df_l5 = pd.read_csv(''.join([output_path, 'lambda_5.csv']), comment='#')
-    df_l7 = pd.read_csv(''.join([output_path, 'lambda_7.csv']), comment='#')
-    df_l10 = pd.read_csv(''.join([output_path, 'lambda_10.csv']), comment='#')
+    df_l1 = pd.read_csv(''.join([output_path, dataset_name, '_lambda_1.csv']), comment='#')
+    df_l2 = pd.read_csv(''.join([output_path, dataset_name, '_lambda_2.csv']), comment='#')
+    df_l5 = pd.read_csv(''.join([output_path, dataset_name, '_lambda_5.csv']), comment='#')
+    df_l7 = pd.read_csv(''.join([output_path, dataset_name, '_lambda_7.csv']), comment='#')
+    df_l10 = pd.read_csv(''.join([output_path, dataset_name, '_lambda_10.csv']), comment='#')
 
 
     # plot the accuracies 
