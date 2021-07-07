@@ -24,7 +24,7 @@ from streamcyber import exp_make_jmi_2D, evaluate_binary_prequential
 from streamcyber import evaluate_lambda, evaluate_binary_holdout
 from streamcyber import read_azure
 
-DATASET = ['nslkdd', 'unswnb']
+DATASET = ['awid', 'nslkdd', 'unswnb']
 
 if __name__ == '__main__': 
 
@@ -36,22 +36,22 @@ if __name__ == '__main__':
     for dataset_name in DATASET: 
         # make the JMI plots for the 
         exp_make_jmi_plots(subscription_id=subscription_id, 
-                       resource_group=resource_group, 
-                       workspace_name=workspace_name, 
-                       dataset_name=dataset_name, 
-                       output_path='outputs/')
+                           resource_group=resource_group, 
+                           workspace_name=workspace_name, 
+                           dataset_name=dataset_name, 
+                           output_path='outputs/')
     
         # make the 2D JMI plot 
         exp_make_jmi_2D(subscription_id=subscription_id, 
-                    resource_group=resource_group, 
-                    workspace_name=dataset_name, 
-                    dataset_name=dataset_name, 
-                    output_path='outputs/')
+                        resource_group=resource_group, 
+                        workspace_name=workspace_name, 
+                        dataset_name=dataset_name, 
+                        output_path='outputs/')
 
         # perform prequential exp
         evaluate_binary_prequential(subscription_id=subscription_id, 
                                     resource_group=resource_group, 
-                                    workspace_name=dataset_name, 
+                                    workspace_name=workspace_name, 
                                     poisson_parameter=4.,
                                     dataset_name=dataset_name, 
                                     output_path='outputs/')
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         # perform hold out exp 
         evaluate_binary_holdout(subscription_id=subscription_id, 
                                 resource_group=resource_group, 
-                                workspace_name=dataset_name, 
+                                workspace_name=workspace_name, 
                                 poisson_parameter=4.,
                                 dataset_name=dataset_name, 
                                 output_path='outputs/')
@@ -67,6 +67,6 @@ if __name__ == '__main__':
         # run the study of sampling 
         evaluate_lambda(subscription_id=subscription_id, 
                         resource_group=resource_group, 
-                        workspace_name=dataset_name, 
+                        workspace_name=workspace_name,
                         dataset_name=dataset_name, 
                         output_path='outputs/')
