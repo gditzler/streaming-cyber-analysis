@@ -302,17 +302,17 @@ def evaluate_binary_prequential(subscription_id,
 
     
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'Accuracy', 
-                   ''.join(output_path, dataset_name, '_online_accuracy.pdf'), 'mean_acc_[M0]', vals=[.96, .88])
+                   ''.join([output_path, dataset_name, '_online_accuracy.pdf']), 'mean_acc_[M0]', vals=[.96, .88])
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'Kappa', 
-                   ''.join(output_path, dataset_name, '_online_kappa_m.pdf'), 'mean_kappa_[M0]', vals=[.9, .72])
+                   ''.join([output_path, dataset_name, '_online_kappa_m.pdf']), 'mean_kappa_[M0]', vals=[.9, .72])
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'F1-Score', 
-                   ''.join(output_path, dataset_name, '_online_f1_m.pdf'), 'mean_f1_[M0]', vals=[.97, .92])
+                   ''.join([output_path, dataset_name, '_online_f1_m.pdf']), 'mean_f1_[M0]', vals=[.97, .92])
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
-                   ''.join(output_path, dataset_name, '_online_time_m.pdf'), 'total_running_time_[M0]', 'Time (s)')
+                   ''.join([output_path, dataset_name, '_online_time_m.pdf']), 'total_running_time_[M0]', 'Time (s)')
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
-                   ''.join(output_path, dataset_name, '_online_test_time_m.pdf'), 'testing_time_[M0]', 'Time (s)')
+                   ''.join([output_path, dataset_name, '_online_test_time_m.pdf']), 'testing_time_[M0]', 'Time (s)')
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
-                   ''.join(output_path, dataset_name, '_online_size_m.pdf'), 'model_size_[M0]', 'Size (kB)')
+                   ''.join([output_path, dataset_name, '_online_size_m.pdf']), 'model_size_[M0]', 'Size (kB)')
 
     file = open(''.join([output_path, dataset_name, '_prequential_latex.txt']), 'wb')
     # print out the latex tables 
