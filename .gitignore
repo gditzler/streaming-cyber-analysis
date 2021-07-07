@@ -1,6 +1,6 @@
-#*.pyc 
- files 
+# files and folders to ignore  
 *.pyc 
 streamcyber/read_azure.py 
-
-# folders 
+outputs/*.csv
+outputs/*.pdf
+outputs/*.pkl

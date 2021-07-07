@@ -37,11 +37,21 @@ def load_dataset(subscription_id, resource_group, workspace_name, dataset_name:s
         dataset_train = Dataset.get_by_name(workspace, name='NSLKDD_training')
         dataset_test = Dataset.get_by_name(workspace, name='NSLKDD_testing')
         df_tr, df_te = proc_nslkdd(dataset_train.to_pandas_dataframe(), dataset_test.to_pandas_dataframe())
+    elif dataset_name == 'awid': 
+        dataset_train = Dataset.get_by_name(workspace, name='AWID_training')
+        dataset_test = Dataset.get_by_name(workspace, name='AWID_testing')
+        df_tr, df_te = proc_awid(dataset_train.to_pandas_dataframe(), dataset_test.to_pandas_dataframe())
     else: 
         raise(ValueError('Unknown dataset name: %s' % dataset_name))
 
     return df_tr, df_te
 
+def proc_awid(df_tr:pd.DataFrame, df_te:pd.DataFrame): 
+    """
+    """
+    df_tr, df_te = df_tr.sample(frac=1.).reset_index(drop=True), df_te.sample(frac=1.).reset_index(drop=True)
+    df_tr, df_te = standardize_df_off_tr(df_tr, df_te)
+    return df_tr, df_te
 
 def nslkddProtocolType(df_set:pd.DataFrame):
     df_set['protocol_type'][df_set['protocol_type'] == 'tcp'] = 0
@@ -146,9 +156,12 @@ def standardize_df_off_tr(df_tr:pd.DataFrame,
     for key in df_tr.keys(): 
         if key != 'target': 
             # scale the testing data w/ the training means/stds
-            df_te[key] = (df_te[key].values - df_tr[key].values.mean())/df_tr[key].values.std()
+            ssd = df_tr[key].values.std()
+            if np.abs(ssd) < .0001: 
+                ssd = .001
+            df_te[key] = (df_te[key].values - df_tr[key].values.mean())/ssd
             # scale the training data 
-            df_tr[key] = (df_tr[key].values - df_tr[key].values.mean())/df_tr[key].values.std()
+            df_tr[key] = (df_tr[key].values - df_tr[key].values.mean())/ssd
     return df_tr, df_te
 
 def calc_metrics(y:np.ndarray, yhat:np.ndarray):

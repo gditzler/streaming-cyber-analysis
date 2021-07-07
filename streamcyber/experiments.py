@@ -46,6 +46,11 @@ from skfeature.function.information_theoretical_based import JMI, LCSI
 
 def exp_make_poisson_plots(output_path:str='outputs/'):
     """make the poisson plots for the paper 
+
+    Parameters 
+    ----------------- 
+    output_path : str
+       path to the output directory [save a pdf figure]
     """ 
     p1, p2, p3 = poisson(1.), poisson(5.), poisson(10.)
     x = [i for i in range(20)]
@@ -64,9 +69,21 @@ def exp_make_jmi_plots(subscription_id,
                        resource_group, 
                        workspace_name, 
                        dataset_name:str='unswnb', 
-                       n_avg:int=10, 
                        output_path:str='outputs/'): 
-    """
+    """plot the mutual information between variables and labels
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     df_tr, df_te = load_dataset(subscription_id, resource_group, workspace_name, dataset_name)
 
@@ -111,7 +128,20 @@ def exp_make_jmi_2D(subscription_id,
                     workspace_name, 
                     dataset_name:str='unswnb', 
                     output_path:str='outputs/'): 
-    """
+    """generate a correlation-like plot of the joint mutual information
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     # 1) randomly shuffle rows; 2) rename label column; 3) drop not useful columns 
     df_tr, _ = load_dataset(subscription_id, resource_group, workspace_name, dataset_name)
@@ -161,7 +191,22 @@ def evaluate_binary_prequential(subscription_id,
                                 poisson_parameter:float=4.,
                                 dataset_name:str='unswnb', 
                                 output_path:str='outputs/'): 
-    """
+    """run the prequntial experiments 
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    poisson_paremeter : float 
+        Poisson distribution parameter 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     # number of data samples used to pre-train the model 
     pretrain_size = 2000
@@ -191,11 +236,6 @@ def evaluate_binary_prequential(subscription_id,
                 OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
                 LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
             ]
-    #clfrs = [
-    #            OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
-    #            OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
-    #            LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
-    #        ]
     N = len(clfrs)
 
     # concat the training and testing data into a stream 
@@ -210,11 +250,11 @@ def evaluate_binary_prequential(subscription_id,
         # configure the prequential datastream evaluator. results are saved to the 
         # google drive. 
         eval = EvaluatePrequential(show_plot=False, 
-                             pretrain_size=pretrain_size, 
-                             batch_size=batch_size, 
-                             metrics=metrics, 
-                             max_samples=max_samples,
-                             output_file=output_path + output_files[n] + '.csv')
+                                   pretrain_size=pretrain_size, 
+                                   batch_size=batch_size, 
+                                   metrics=metrics, 
+                                   max_samples=max_samples,
+                                   output_file=''.join([output_path, output_files[n], '.csv']))
         # process the datastream then save off the models and evaluation 
         mdl = eval.evaluate(stream=stream, model=mdl)
         mdls.append(mdl[0])
@@ -262,17 +302,17 @@ def evaluate_binary_prequential(subscription_id,
 
     
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'Accuracy', 
-                   ''.join(output_path, dataset_name, '_online_accuracy.pdf'), 'mean_acc_[M0]', vals=[.96, .88])
+                   ''.join([output_path, dataset_name, '_online_accuracy.pdf']), 'mean_acc_[M0]', vals=[.96, .88])
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'Kappa', 
-                   ''.join(output_path, dataset_name, '_online_kappa_m.pdf'), 'mean_kappa_[M0]', vals=[.9, .72])
+                   ''.join([output_path, dataset_name, '_online_kappa_m.pdf']), 'mean_kappa_[M0]', vals=[.9, .72])
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'F1-Score', 
-                   ''.join(output_path, dataset_name, '_online_f1_m.pdf'), 'mean_f1_[M0]', vals=[.97, .92])
+                   ''.join([output_path, dataset_name, '_online_f1_m.pdf']), 'mean_f1_[M0]', vals=[.97, .92])
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
-                   ''.join(output_path, dataset_name, '_online_time_m.pdf'), 'total_running_time_[M0]', 'Time (s)')
+                   ''.join([output_path, dataset_name, '_online_time_m.pdf']), 'total_running_time_[M0]', 'Time (s)')
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
-                   ''.join(output_path, dataset_name, '_online_test_time_m.pdf'), 'testing_time_[M0]', 'Time (s)')
+                   ''.join([output_path, dataset_name, '_online_test_time_m.pdf']), 'testing_time_[M0]', 'Time (s)')
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
-                   ''.join(output_path, dataset_name, '_online_size_m.pdf'), 'model_size_[M0]', 'Size (kB)')
+                   ''.join([output_path, dataset_name, '_online_size_m.pdf']), 'model_size_[M0]', 'Size (kB)')
 
     file = open(''.join([output_path, dataset_name, '_prequential_latex.txt']), 'wb')
     # print out the latex tables 
@@ -305,7 +345,22 @@ def evaluate_binary_holdout(subscription_id,
                             poisson_parameter:float=4.,
                             dataset_name:str='unswnb', 
                             output_path:str='outputs/'):
-    """
+    """run the holdout experiments 
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    poisson_parameter : float 
+        Poisson distribution parameter 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     # number of data samples used to pre-train the model 
     pretrain_size = 2000
@@ -335,11 +390,6 @@ def evaluate_binary_holdout(subscription_id,
                 OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
                 LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
             ]
-    #clfrs = [
-    #            OzaBaggingClassifier(base_estimator=HoeffdingTreeClassifier()),
-    #            OzaBaggingADWINClassifier(base_estimator=HoeffdingTreeClassifier()),
-    #            LeveragingBaggingClassifier(base_estimator=HoeffdingTreeClassifier(), w=poisson_parameter)
-    #        ]  
     N = len(clfrs)
     clfrs_names = ['HT', 'Bag', 'BagADWIN', 'Leverage']
 
@@ -355,7 +405,7 @@ def evaluate_binary_holdout(subscription_id,
                              batch_size=batch_size, 
                              metrics=metrics, 
                              max_samples=max_samples,
-                             output_file=output_path + 'tmp.csv')
+                             output_file=''.join([output_path, 'tmp.csv']))
         mdl = eval.evaluate(stream=stream, model=mdl)
 
         # get the predictions on the hold out dataset then calculate the accuracy, 
@@ -401,11 +451,24 @@ def evaluate_binary_holdout(subscription_id,
 
  
 def evaluate_lambda(subscription_id, 
-                     resource_group, 
-                     workspace_name, 
-                     dataset_name:str='unswnb', 
-                     output_path:str='outputs/'): 
-    """
+                    resource_group, 
+                    workspace_name, 
+                    dataset_name:str='unswnb', 
+                    output_path:str='outputs/'): 
+    """run the ablation study 
+
+    Parameters 
+    ----------------- 
+    subscription_id : str 
+        Mircroft Azure ML subscription ID 
+    resource_group : str 
+        Micrsoft Azure Resource Group 
+    workspace_name : str 
+        Micrsoft Azure Workspace Name 
+    dataset_name : str
+        dataset to process (saved as an Azure blob). [unswnb, nslkdd] 
+    output_path : str
+        path to the output directory 
     """
     # number of data samples used to pre-train the model 
     pretrain_size = 2000
@@ -436,7 +499,7 @@ def evaluate_lambda(subscription_id,
                              batch_size=batch_size, 
                              metrics=metrics, 
                              max_samples=max_samples,
-                             output_file=output_path + 'lambda_' + str(int(LAMBDA[n])) + '.csv')
+                             output_file=''.join([output_path, 'lambda_', str(int(LAMBDA[n])), '.csv']))
         # process the datastream then save off the models and evaluation 
         mdl = eval.evaluate(stream=stream, model=mdl)
         mdls.append(mdl[0])
@@ -465,7 +528,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('Accuracy')
-    plt.savefig(''.join([output_path, 'lambda_accuracy_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_accuracy_m.pdf']))
 
     # plot the kappa statistics 
     plt.figure()
@@ -477,7 +540,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('Kappa')
-    plt.savefig(''.join([output_path, 'lambda_kappa_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_kappa_m.pdf']))
 
     # plot the f1-scores 
     plt.figure()
@@ -489,7 +552,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('F1-Score')
-    plt.savefig(''.join([output_path, 'lambda_f1_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_f1_m.pdf']))
 
     # plot the total_running_time_ 
     plt.figure()
@@ -501,7 +564,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('time (s)')
-    plt.savefig(''.join([output_path, 'lambda_time_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_time_m.pdf']))
 
     # plot the testing_time_ 
     plt.figure()
@@ -513,7 +576,7 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('time (s)')
-    plt.savefig(''.join([output_path, 'lambda_test_time_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, '_lambda_test_time_m.pdf']))
 
     # plot the model_size_ 
     plt.figure()
@@ -525,4 +588,4 @@ def evaluate_lambda(subscription_id,
     plt.legend()
     plt.xlabel('Sample Number')
     plt.ylabel('Size (kB)')
-    plt.savefig(''.join([output_path, 'lambda_size_m.pdf']))
+    plt.savefig(''.join([output_path, dataset_name, 'lambda_size_m.pdf']))
