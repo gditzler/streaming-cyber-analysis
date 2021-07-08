@@ -332,7 +332,7 @@ def evaluate_binary_prequential(subscription_id,
     file.write(''.join(['F1-Score & ', str(100*df_ht['mean_f1_[M0]'].values[-1]),
                ' & ', str(100*df_bag['mean_f1_[M0]'].values[-1]), 
                ' & ', str(100*df_bagwin['mean_f1_[M0]'].values[-1]), 
-               ' & ', str(100*df_leverage['mean_f1_[M0]'].values[-1]) + ' \\\\ '])
+               ' & ', str(100*df_leverage['mean_f1_[M0]'].values[-1]), ' \\\\ '])
     )
     file.close()
 
@@ -441,7 +441,7 @@ def evaluate_binary_holdout(subscription_id,
     file = open(''.join([output_path, dataset_name, '_holdout_latex.txt']), 'w')  
     ' & '.join(clfrs_names) + '\\\\'
     for n in range(N): 
-        file.write(''.join([clfrs_names[n], ' & ' + str(100*accs[n]), ' & ', str(100*f1s[n]), ' & ',  str(100*kappas[n]), '\\\\']))
+        file.write(''.join([clfrs_names[n], ' & ', str(100*accs[n]), ' & ', str(100*f1s[n]), ' & ',  str(100*kappas[n]), '\\\\']))
 
     for n in range(len(static_clfr)): 
         file.write(''.join([static_clfr_name[n], ' & ', str(100*accs_static[n]), ' & ', str(100*f1s_static[n]), ' & ', str(100*kappas_static[n]), '\\\\']))
@@ -535,4 +535,3 @@ def evaluate_lambda(subscription_id,
     make_plot('Time (s)', 'total_running_time_[M0]', '_lambda_time_m.pdf')
     make_plot('Time (s)', 'testing_time_[M0]', '_lambda_test_time_m.pdf')
     make_plot('Size (kB)', 'model_size_[M0]', '_lambda_size_m.pdf')
-    
