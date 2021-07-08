@@ -4,3 +4,4 @@ streamcyber/read_azure.py
 outputs/*.csv
 outputs/*.pdf
 outputs/*.pkl
+outputs/*_latex.txt

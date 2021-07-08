@@ -318,23 +318,21 @@ def evaluate_binary_prequential(subscription_id,
     # print out the latex tables 
     file.write('\\bf Metric & \\bf HT & \\bf Bagging & \\bf BagADWIN & \\bf Leverage \\\\')
     file.write('\\hline\\hline')
-    file.write('Accuracy & ', 
-       str(100*df_ht['mean_acc_[M0]'].values[-1]) + ' & ',
-       str(100*df_bag['mean_acc_[M0]'].values[-1]) + ' & ',
-       str(100*df_bagwin['mean_acc_[M0]'].values[-1]) + ' & ',
-       str(100*df_leverage['mean_acc_[M0]'].values[-1]) + ' \\\\ '
+    file.write(''.join(['Accuracy & ', str(100*df_ht['mean_acc_[M0]'].values[-1]), 
+                        ' & ', str(100*df_bag['mean_acc_[M0]'].values[-1]), 
+                        ' & ', str(100*df_bagwin['mean_acc_[M0]'].values[-1]), 
+                        ' & ', str(100*df_leverage['mean_acc_[M0]'].values[-1]), 
+                        ' \\\\ '])
     )
-    file.write('$\kappa$ & ', 
-       str(100*df_ht['mean_kappa_[M0]'].values[-1]) + ' & ',
-       str(100*df_bag['mean_kappa_[M0]'].values[-1]) + ' & ',
-       str(100*df_bagwin['mean_kappa_[M0]'].values[-1]) + ' & ',
-       str(100*df_leverage['mean_kappa_[M0]'].values[-1]) + ' \\\\ '
+    file.write(''.join(['$\kappa$ & ', str(100*df_ht['mean_kappa_[M0]'].values[-1]), 
+               ' & ', str(100*df_bag['mean_kappa_[M0]'].values[-1]),  
+               ' & ', str(100*df_bagwin['mean_kappa_[M0]'].values[-1]), 
+               ' & ', str(100*df_leverage['mean_kappa_[M0]'].values[-1]) + ' \\\\ '])
     )
-    file.write('F1-Score & ', 
-       str(100*df_ht['mean_f1_[M0]'].values[-1]) + ' & ',
-       str(100*df_bag['mean_f1_[M0]'].values[-1]) + ' & ',
-       str(100*df_bagwin['mean_f1_[M0]'].values[-1]) + ' & ',
-       str(100*df_leverage['mean_f1_[M0]'].values[-1]) + ' \\\\ '
+    file.write(''.join(['F1-Score & ', str(100*df_ht['mean_f1_[M0]'].values[-1]),
+               ' & ', str(100*df_bag['mean_f1_[M0]'].values[-1]), 
+               ' & ', str(100*df_bagwin['mean_f1_[M0]'].values[-1]), 
+               ' & ', str(100*df_leverage['mean_f1_[M0]'].values[-1]) + ' \\\\ '])
     )
     file.close()
 
@@ -443,10 +441,10 @@ def evaluate_binary_holdout(subscription_id,
     file = open(''.join([output_path, dataset_name, '_holdout_latex.txt']), 'w')  
     ' & '.join(clfrs_names) + '\\\\'
     for n in range(N): 
-        file.write(clfrs_names[n] + ' & ' + str(100*accs[n])+ ' & ' + str(100*f1s[n])+ ' & ' + str(100*kappas[n]) + '\\\\')
+        file.write(''.join([clfrs_names[n], ' & ' + str(100*accs[n]), ' & ', str(100*f1s[n]), ' & ',  str(100*kappas[n]), '\\\\']))
 
     for n in range(len(static_clfr)): 
-        file.write(static_clfr_name[n] + ' & ' + str(100*accs_static[n])+ ' & ' + str(100*f1s_static[n])+ ' & ' + str(100*kappas_static[n]) + '\\\\')
+        file.write(''.join([static_clfr_name[n], ' & ', str(100*accs_static[n]), ' & ', str(100*f1s_static[n]), ' & ', str(100*kappas_static[n]), '\\\\']))
     file.close()
 
  
@@ -518,74 +516,23 @@ def evaluate_lambda(subscription_id,
     df_l10 = pd.read_csv(''.join([output_path, dataset_name, '_lambda_10.csv']), comment='#')
 
 
-    # plot the accuracies 
-    plt.figure()
-    plt.plot(df_l1['id'], df_l1['mean_acc_[M0]'], label='Lambda=1')
-    plt.plot(df_l2['id'], df_l2['mean_acc_[M0]'], label='Lambda=2')
-    plt.plot(df_l5['id'], df_l5['mean_acc_[M0]'], label='Lambda=5')
-    plt.plot(df_l7['id'], df_l7['mean_acc_[M0]'], label='Lambda=7')
-    plt.plot(df_l10['id'], df_l10['mean_acc_[M0]'], label='Lambda=10')
-    plt.legend()
-    plt.xlabel('Sample Number')
-    plt.ylabel('Accuracy')
-    plt.savefig(''.join([output_path, dataset_name, '_lambda_accuracy_m.pdf']))
+    def make_plot(y_label:str, index:str, label:str):
+        plt.figure()
+        plt.plot(df_l1['id'], df_l1[index], label='Lambda=1')
+        plt.plot(df_l2['id'], df_l2[index], label='Lambda=2')
+        plt.plot(df_l5['id'], df_l5[index], label='Lambda=5')
+        plt.plot(df_l7['id'], df_l7[index], label='Lambda=7')
+        plt.plot(df_l10['id'], df_l10[index], label='Lambda=10')
+        plt.legend()
+        plt.xlabel('Sample Number')
+        plt.ylabel(y_label)
+        plt.savefig(''.join([output_path, dataset_name, label])) 
+        return None 
 
-    # plot the kappa statistics 
-    plt.figure()
-    plt.plot(df_l1['id'], df_l1['mean_kappa_[M0]'], label='Lambda=1')
-    plt.plot(df_l2['id'], df_l2['mean_kappa_[M0]'], label='Lambda=2')
-    plt.plot(df_l5['id'], df_l5['mean_kappa_[M0]'], label='Lambda=5')
-    plt.plot(df_l7['id'], df_l7['mean_kappa_[M0]'], label='Lambda=7')
-    plt.plot(df_l10['id'], df_l10['mean_kappa_[M0]'], label='Lambda=10')
-    plt.legend()
-    plt.xlabel('Sample Number')
-    plt.ylabel('Kappa')
-    plt.savefig(''.join([output_path, dataset_name, '_lambda_kappa_m.pdf']))
-
-    # plot the f1-scores 
-    plt.figure()
-    plt.plot(df_l1['id'], df_l1['mean_f1_[M0]'], label='Lambda=1')
-    plt.plot(df_l2['id'], df_l2['mean_f1_[M0]'], label='Lambda=2')
-    plt.plot(df_l5['id'], df_l5['mean_f1_[M0]'], label='Lambda=5')
-    plt.plot(df_l7['id'], df_l7['mean_f1_[M0]'], label='Lambda=7')
-    plt.plot(df_l10['id'], df_l10['mean_f1_[M0]'], label='Lambda=10')
-    plt.legend()
-    plt.xlabel('Sample Number')
-    plt.ylabel('F1-Score')
-    plt.savefig(''.join([output_path, dataset_name, '_lambda_f1_m.pdf']))
-
-    # plot the total_running_time_ 
-    plt.figure()
-    plt.plot(df_l1['id'], df_l1['total_running_time_[M0]'], label='Lambda=1')
-    plt.plot(df_l2['id'], df_l2['total_running_time_[M0]'], label='Lambda=2')
-    plt.plot(df_l5['id'], df_l5['total_running_time_[M0]'], label='Lambda=5')
-    plt.plot(df_l7['id'], df_l7['total_running_time_[M0]'], label='Lambda=7')
-    plt.plot(df_l10['id'], df_l10['total_running_time_[M0]'], label='Lambda=10')
-    plt.legend()
-    plt.xlabel('Sample Number')
-    plt.ylabel('time (s)')
-    plt.savefig(''.join([output_path, dataset_name, '_lambda_time_m.pdf']))
-
-    # plot the testing_time_ 
-    plt.figure()
-    plt.plot(df_l1['id'], df_l1['testing_time_[M0]'], label='Lambda=1')
-    plt.plot(df_l2['id'], df_l2['testing_time_[M0]'], label='Lambda=2')
-    plt.plot(df_l5['id'], df_l5['testing_time_[M0]'], label='Lambda=5')
-    plt.plot(df_l7['id'], df_l7['testing_time_[M0]'], label='Lambda=7')
-    plt.plot(df_l10['id'], df_l10['testing_time_[M0]'], label='Lambda=10')
-    plt.legend()
-    plt.xlabel('Sample Number')
-    plt.ylabel('time (s)')
-    plt.savefig(''.join([output_path, dataset_name, '_lambda_test_time_m.pdf']))
-
-    # plot the model_size_ 
-    plt.figure()
-    plt.plot(df_l1['id'], df_l1['model_size_[M0]']/1024, label='Lambda=1')
-    plt.plot(df_l2['id'], df_l2['model_size_[M0]']/1024, label='Lambda=2')
-    plt.plot(df_l5['id'], df_l5['model_size_[M0]']/1024, label='Lambda=5')
-    plt.plot(df_l7['id'], df_l7['model_size_[M0]']/1024, label='Lambda=7')
-    plt.plot(df_l10['id'], df_l10['model_size_[M0]']/1024, label='Lambda=10')
-    plt.legend()
-    plt.xlabel('Sample Number')
-    plt.ylabel('Size (kB)')
-    plt.savefig(''.join([output_path, dataset_name, 'lambda_size_m.pdf']))
+    make_plot('Accuracy', 'mean_acc_[M0]', '_lambda_accuracy_m.pdf')
+    make_plot('Kappa', 'mean_kappa_[M0]', '_lambda_kappa_m.pdf')
+    make_plot('F1-Score', 'mean_f1_[M0]', '_lambda_f1_m.pdf')
+    make_plot('Time (s)', 'total_running_time_[M0]', '_lambda_time_m.pdf')
+    make_plot('Time (s)', 'testing_time_[M0]', '_lambda_test_time_m.pdf')
+    make_plot('Size (kB)', 'model_size_[M0]', '_lambda_size_m.pdf')
+    
