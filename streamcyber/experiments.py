@@ -117,11 +117,6 @@ def exp_make_jmi_plots(subscription_id,
     plt.legend()
     plt.savefig(''.join([output_path, dataset_name, '_feature_ranks.pdf']))
 
-    # print out the top 10 features in a latex list
-    # print('\begin{enumerate}')
-    # for i in sort_mitr[:10]:
-    #     print('  \item ' + feature_names[i] + ': ' + feature_descr[i]) 
-    # print('\end{enumerate}')
 
 def exp_make_jmi_2D(subscription_id, 
                     resource_group, 
@@ -273,7 +268,6 @@ def evaluate_binary_prequential(subscription_id,
     df_leverage = pd.read_csv(''.join([output_path, 'output_leverage_m.csv']), comment='#')
 
     def make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, ylb:str, opath:str, idx:str, vals:list):
-
         # plot the accuracies 
         plt.figure()
         plt.plot(df_ht['id'], df_ht[idx], label='HT')
@@ -299,7 +293,6 @@ def evaluate_binary_prequential(subscription_id,
         plt.ylabel(ylb)
         plt.savefig(opath)
 
-
     
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'Accuracy', 
                    ''.join([output_path, dataset_name, '_online_accuracy.pdf']), 'mean_acc_[M0]', vals=[.96, .88])
@@ -316,23 +309,23 @@ def evaluate_binary_prequential(subscription_id,
 
     file = open(''.join([output_path, dataset_name, '_prequential_latex.txt']), 'w')
     # print out the latex tables 
-    file.write('\\bf Metric & \\bf HT & \\bf Bagging & \\bf BagADWIN & \\bf Leverage \\\\')
-    file.write('\\hline\\hline')
+    file.write('\\bf Metric & \\bf HT & \\bf Bagging & \\bf BagADWIN & \\bf Leverage \\\\ \n')
+    file.write('\\hline\\hline \n')
     file.write(''.join(['Accuracy & ', str(100*df_ht['mean_acc_[M0]'].values[-1]), 
                         ' & ', str(100*df_bag['mean_acc_[M0]'].values[-1]), 
                         ' & ', str(100*df_bagwin['mean_acc_[M0]'].values[-1]), 
                         ' & ', str(100*df_leverage['mean_acc_[M0]'].values[-1]), 
-                        ' \\\\ '])
+                        ' \\\\ \n'])
     )
     file.write(''.join(['$\kappa$ & ', str(100*df_ht['mean_kappa_[M0]'].values[-1]), 
                ' & ', str(100*df_bag['mean_kappa_[M0]'].values[-1]),  
                ' & ', str(100*df_bagwin['mean_kappa_[M0]'].values[-1]), 
-               ' & ', str(100*df_leverage['mean_kappa_[M0]'].values[-1]) + ' \\\\ '])
+               ' & ', str(100*df_leverage['mean_kappa_[M0]'].values[-1]) + ' \\\\ \n'])
     )
     file.write(''.join(['F1-Score & ', str(100*df_ht['mean_f1_[M0]'].values[-1]),
                ' & ', str(100*df_bag['mean_f1_[M0]'].values[-1]), 
                ' & ', str(100*df_bagwin['mean_f1_[M0]'].values[-1]), 
-               ' & ', str(100*df_leverage['mean_f1_[M0]'].values[-1]), ' \\\\ '])
+               ' & ', str(100*df_leverage['mean_f1_[M0]'].values[-1]), ' \\\\ \n'])
     )
     file.close()
 
@@ -399,11 +392,11 @@ def evaluate_binary_holdout(subscription_id,
         # data. this is specified by the original authors 
         mdl = clfrs[n]
         eval = EvaluatePrequential(show_plot=False, 
-                             pretrain_size=pretrain_size, 
-                             batch_size=batch_size, 
-                             metrics=metrics, 
-                             max_samples=max_samples,
-                             output_file=''.join([output_path, 'tmp.csv']))
+                                   pretrain_size=pretrain_size, 
+                                   batch_size=batch_size, 
+                                   metrics=metrics, 
+                                   max_samples=max_samples,
+                                   output_file=''.join([output_path, 'tmp.csv']))
         mdl = eval.evaluate(stream=stream, model=mdl)
 
         # get the predictions on the hold out dataset then calculate the accuracy, 
@@ -420,7 +413,7 @@ def evaluate_binary_holdout(subscription_id,
 
     # write the classification statistics to a python file  
     data = {'accs': accs, 'f1s': f1s, 'kappas': kappas, 'clfr_names': clfrs_names}
-    pkl.dump(data, open(''.join([output_path, 'holdout_classifcation_statistics.pkl']), 'wb'))
+    pkl.dump(data, open(''.join([output_path, dataset_name, '_holdout_classifcation_statistics.pkl']), 'wb'))
 
     # evaluate the static classifiers on the train/test hold out experiment
     static_clfr_name = [
@@ -439,12 +432,12 @@ def evaluate_binary_holdout(subscription_id,
 
     # print out the latex tables 
     file = open(''.join([output_path, dataset_name, '_holdout_latex.txt']), 'w')  
-    ' & '.join(clfrs_names) + '\\\\'
+    file.write(' & '.join(clfrs_names) + '\\\\ \n')
     for n in range(N): 
-        file.write(''.join([clfrs_names[n], ' & ', str(100*accs[n]), ' & ', str(100*f1s[n]), ' & ',  str(100*kappas[n]), '\\\\']))
+        file.write(''.join([clfrs_names[n], ' & ', str(100*accs[n]), ' & ', str(100*f1s[n]), ' & ',  str(100*kappas[n]), '\\\\ \n']))
 
     for n in range(len(static_clfr)): 
-        file.write(''.join([static_clfr_name[n], ' & ', str(100*accs_static[n]), ' & ', str(100*f1s_static[n]), ' & ', str(100*kappas_static[n]), '\\\\']))
+        file.write(''.join([static_clfr_name[n], ' & ', str(100*accs_static[n]), ' & ', str(100*f1s_static[n]), ' & ', str(100*kappas_static[n]), '\\\\ \n']))
     file.close()
 
  
@@ -493,11 +486,11 @@ def evaluate_lambda(subscription_id,
         # configure the prequential datastream evaluator. results are saved to the 
         # google drive. 
         eval = EvaluatePrequential(show_plot=False, 
-                             pretrain_size=pretrain_size, 
-                             batch_size=batch_size, 
-                             metrics=metrics, 
-                             max_samples=max_samples,
-                             output_file=''.join([output_path, dataset_name, '_lambda_', str(int(LAMBDA[n])), '.csv']))
+                                   pretrain_size=pretrain_size, 
+                                   batch_size=batch_size, 
+                                   metrics=metrics, 
+                                   max_samples=max_samples,
+                                   output_file=''.join([output_path, dataset_name, '_lambda_', str(int(LAMBDA[n])), '.csv']))
         # process the datastream then save off the models and evaluation 
         mdl = eval.evaluate(stream=stream, model=mdl)
         mdls.append(mdl[0])
@@ -505,7 +498,7 @@ def evaluate_lambda(subscription_id,
         
     # write the output to a pickle file 
     data = {'mdls': mdls, 'evals': evals}
-    pkl.dump(data, open(''.join([output_path, 'prequential_models_evaluators_lambda.pkl']), 'wb'))
+    pkl.dump(data, open(''.join([output_path, dataset_name, '_prequential_models_evaluators_lambda.pkl']), 'wb'))
 
     # the results from the prequential experiements need to be loaded from the drive 
     # since they are not in the environment
@@ -527,7 +520,6 @@ def evaluate_lambda(subscription_id,
         plt.xlabel('Sample Number')
         plt.ylabel(y_label)
         plt.savefig(''.join([output_path, dataset_name, label])) 
-        return None 
 
     make_plot('Accuracy', 'mean_acc_[M0]', '_lambda_accuracy_m.pdf')
     make_plot('Kappa', 'mean_kappa_[M0]', '_lambda_kappa_m.pdf')

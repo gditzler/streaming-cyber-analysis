@@ -1,5 +1,8 @@
 # streaming-cyber-analysis
 
+This code repo implements data stream processing algorithms for high volume cybersecurity datastream. Particularly, this code implements online supervised learning and evaluation of data streams related to intrusion detection systems (IDS). We focus on IDS related to network (NSL-KDD and UNSWNB) and WiFi attacks (private dataset). The latter dataset is a private dataset that will be made publicly available. 
+
+
 # Working Through the Code 
 
 ## Reading in the Data
