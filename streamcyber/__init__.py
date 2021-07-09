@@ -36,3 +36,5 @@ __all__ = [
         'exp_make_jmi_2D', 
         'read_azure'
     ]
+
+__version__ = '0.1.0'

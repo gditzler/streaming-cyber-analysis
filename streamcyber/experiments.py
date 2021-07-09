@@ -43,6 +43,7 @@ from .utils import jaccard, kuncheva, calc_metrics
 import matplotlib.pylab as plt 
 from skfeature.function.information_theoretical_based import JMI, LCSI
 
+plt.style.use('seaborn')
 
 def exp_make_poisson_plots(output_path:str='outputs/'):
     """make the poisson plots for the paper 
