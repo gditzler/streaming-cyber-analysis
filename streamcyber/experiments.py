@@ -267,7 +267,7 @@ def evaluate_binary_prequential(subscription_id,
     df_bagwin = pd.read_csv(''.join([output_path, 'output_bagwin_m.csv']), comment='#')
     df_leverage = pd.read_csv(''.join([output_path, 'output_leverage_m.csv']), comment='#')
 
-    def make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, ylb:str, opath:str, idx:str, vals:list):
+    def make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, ylb:str, opath:str, idx:str):
         # plot the accuracies 
         plt.figure()
         plt.plot(df_ht['id'], df_ht[idx], label='HT')
@@ -297,11 +297,11 @@ def evaluate_binary_prequential(subscription_id,
 
     
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'Accuracy', 
-                   ''.join([output_path, dataset_name, '_online_accuracy.pdf']), 'mean_acc_[M0]', vals=[.96, .88])
+                   ''.join([output_path, dataset_name, '_online_accuracy.pdf']), 'mean_acc_[M0]')
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'Kappa', 
-                   ''.join([output_path, dataset_name, '_online_kappa_m.pdf']), 'mean_kappa_[M0]', vals=[.9, .72])
+                   ''.join([output_path, dataset_name, '_online_kappa_m.pdf']), 'mean_kappa_[M0]')
     make_stat_plot(df_ht, df_bag, df_bagwin, df_leverage, N1, 'F1-Score', 
-                   ''.join([output_path, dataset_name, '_online_f1_m.pdf']), 'mean_f1_[M0]', vals=[.97, .92])
+                   ''.join([output_path, dataset_name, '_online_f1_m.pdf']), 'mean_f1_[M0]')
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
                    ''.join([output_path, dataset_name, '_online_time_m.pdf']), 'total_running_time_[M0]', 'Time (s)')
     make_time_plot(df_ht, df_bag, df_bagwin, df_leverage, 
