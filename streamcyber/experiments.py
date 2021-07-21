@@ -37,8 +37,7 @@ from skmultiflow.meta import OzaBaggingADWINClassifier
 from skmultiflow.meta import LeveragingBaggingClassifier
 from skmultiflow.evaluation import EvaluatePrequential, EvaluateHoldout
 
-from .utils import load_dataset, standardize_df_off_tr
-from .utils import jaccard, kuncheva, calc_metrics
+from .utils import jaccard, kuncheva, calc_metrics, load_dataset
 
 import matplotlib.pylab as plt 
 from skfeature.function.information_theoretical_based import JMI, LCSI
